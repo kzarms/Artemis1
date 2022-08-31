@@ -3,7 +3,7 @@
     "@fitbit/sdk": "~6.1.0"
   },
   "fitbit": {
-    "appUUID": "82aa3779-81cb-4237-b872-b710e6cbe0e7",
+    "appUUID": "a4877b5f-cd86-457d-96b8-70b22093332e",
     "appType": "clockface",
     "appDisplayName": "Artemis1",
     "iconFile": "resources/icon.png",

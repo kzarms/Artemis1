@@ -1,8 +1,8 @@
 .background {
-  viewport-fill: yellow;
+  viewport-fill: black;
 }
 
-#myLabel {
+#appTime {
   font-size: 80;
   font-family: System-Bold;
   text-length: 32;
