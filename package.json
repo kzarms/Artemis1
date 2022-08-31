@@ -5,19 +5,26 @@
   "fitbit": {
     "appUUID": "82aa3779-81cb-4237-b872-b710e6cbe0e7",
     "appType": "clockface",
-    "appDisplayName": "MyClock",
+    "appDisplayName": "Artemis1",
     "iconFile": "resources/icon.png",
     "wipeColor": "",
-    "requestedPermissions": [],
+    "requestedPermissions": [
+      "access_internet"
+    ],
     "buildTargets": [
       "atlas",
       "vulcan"
     ],
     "i18n": {
       "en-US": {
-        "name": "MyClock"
+        "name": "Artemis1"
       }
     },
     "defaultLanguage": "en-US"
-  }
+  },
+  "scripts": {
+		"build": "./node_modules/@fitbit/sdk/bin/fitbit-build.js",
+		"start": " ./node_modules/@fitbit/sdk-cli/lib/cli.js",
+		"build-global": "fitbit-build"
+	}
 }
