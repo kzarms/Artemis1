@@ -2,12 +2,31 @@
   viewport-fill: black;
 }
 
-#appTime {
-  font-size: 80;
-  font-family: System-Bold;
-  text-length: 32;
+*{
   text-anchor: middle;
+  fill:white;
+}
+
+#appTime {
+  font-family: System-Bold;
+  font-size: 80;
+  text-length: 32;
   x: 50%;
-  y: 50%+40;
+  y: 20%;
   fill: white;
 }
+
+#bat_level{
+  text-length: 4;
+  font-size: 26;
+  x: 15%;
+  y: 15%;
+}
+
+#heart_rate{
+  text-length: 8;
+  font-size: 26;
+  x: 85%;
+  y: 15%;
+}
+

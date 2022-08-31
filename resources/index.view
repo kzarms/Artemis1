@@ -1,3 +1,5 @@
 <svg class="background">
   <text id="appTime" />
+  <text id="bat_level" />
+  <text id="heart_rate" />
 </svg>
