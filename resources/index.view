@@ -6,19 +6,21 @@
     text-anchor="middle"
     text-length="32"
     x="50%+15" y="20%">10:00</text>
+  <text id="appSec" fill="white" font-size="80"
+    x="81%" y="20%">.</text>
   <text id="bat_level" fill="white" font-size="24"
     x="10%" y="12%">100%</text>
   <text id="heart_rate" fill="white" font-size="24"
-    text-length="8"
+    text-length="12"
     x="10%" y="20%">60</text>
 
   <circle id="earth" cx="50%" cy="468" r="200" fill="#22acda">
-    <animate attributeName="cy" begin="load" from="500" to="468" dur="1" />
+    <animate attributeName="cy" begin="enable" from="500" to="468" dur="1" />
   </circle>
 
   <circle id="moon" cx="205" cy="128" r="28" fill="#afadb3">
-    <animate attributeName="cx" begin="load" from="180" to="205" dur="1" />
-    <animate attributeName="cy" begin="load" from="145" to="128" dur="1" />
+    <animate attributeName="cx" begin="enable" from="180" to="205" dur="1" />
+    <animate attributeName="cy" begin="enable" from="145" to="128" dur="1" />
   </circle>
   <line id="moon_shadow" x1="180" y1="110" x2="201" y2="160" fill="black" stroke-width="25" />
   <rect x="150" y="110" width="40" height="70" fill="black" />

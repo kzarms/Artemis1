@@ -6,12 +6,12 @@ import { HeartRateSensor } from 'heart-rate';
 import { preferences } from "user-settings";
 import * as util from "../common/utils";
 
-
-
-const myLabel = document.getElementById("appTime");
+const appTime = document.getElementById("appTime");
+const appSec = document.getElementById("appSec");
 const battery_level_element = document.getElementById("bat_level");
 const heart_rate_element = document.getElementById("heart_rate");
-
+const earth = document.getElementById("earth");
+const moon = document.getElementById("moon");
 const prgs = document.getElementById("prgs");
 
 // Hart rate sensor even handling
@@ -25,7 +25,7 @@ if (HeartRateSensor) {
     } else if (hrm.heartRate < 100) {
       heart_rate_element.text = hrm.heartRate + "❤️";
       heart_rate_element.style.fill = "white";
-    } else if (100 < hrm.heartRate < 150) {
+    } else if (hrm.heartRate < 150) {
       heart_rate_element.text = hrm.heartRate + "❤️";
       heart_rate_element.style.fill = "yellow";
     }
@@ -44,11 +44,23 @@ if (HeartRateSensor) {
   console.log("This device does NOT have a HeartRateSensor!");
 }
 
+// Set automation for display on and off
+display.addEventListener("change", () => {
+  if(display.on) {
+    earth.animate("enable");
+    moon.animate("enable");
+  } else {
+    earth.animate("disable");
+    moon.animate("disable");
+  }
+});
+
 // Update the clock every second
 clock.granularity = "seconds";
 clock.ontick = (evt) => {
   let today = evt.date;
   let hours = today.getHours();
+  let seconds = today.getSeconds();
   if (preferences.clockDisplay === "12h") {
     // 12h format
     hours = hours % 12 || 12;
@@ -57,8 +69,12 @@ clock.ontick = (evt) => {
     hours = util.zeroPad(hours);
   }
   let mins = util.zeroPad(today.getMinutes());
-  myLabel.text = `${hours}:${mins}`;
-
+  appTime.text = `${hours}:${mins}`;
+  if(seconds % 2){
+    appSec.text = "";
+  } else {
+    appSec.text = ".";
+  }
   // Battery
   battery_level_element.text = Math.floor(battery.chargeLevel) + "%";
   if (battery.chargeLevel < 10) {
