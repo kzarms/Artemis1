@@ -12,9 +12,20 @@
     text-length="8"
     x="10%" y="20%">60</text>
 
-  <image x="0%" y="20%" href="artemis.png" />
+  <circle id="earth" cx="50%" cy="468" r="200" fill="#22acda">
+    <animate attributeName="cy" begin="load" from="500" to="468" dur="1" />
+  </circle>
 
-  <circle id="earth" cx="50%" cy="570" r="280" fill="#22acda" />
+  <circle id="moon" cx="205" cy="128" r="28" fill="#afadb3">
+    <animate attributeName="cx" begin="load" from="180" to="205" dur="1" />
+    <animate attributeName="cy" begin="load" from="145" to="128" dur="1" />
+  </circle>
+  <line id="moon_shadow" x1="180" y1="110" x2="201" y2="160" fill="black" stroke-width="25" />
+  <rect x="150" y="110" width="40" height="70" fill="black" />
 
-  <arc id="prgs" x="-10" y="258" width="360" height="360" fill="fb-green" arc-width="12" start-angle="312" sweep-angle="5" />
+  <image x="0%" y="20%" href="artemis2.png" />
+
+  <arc id="prgs" x="-12" y="260" width="364" height="364" fill="fb-green" arc-width="10" start-angle="312" sweep-angle="53">
+    <animate attributeName="sweep-angle" begin="load" from="0" to="100" dur="1" />
+  </arc>
 </svg>
