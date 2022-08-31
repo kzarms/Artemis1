@@ -12,8 +12,7 @@ const myLabel = document.getElementById("appTime");
 const battery_level_element = document.getElementById("bat_level");
 const heart_rate_element = document.getElementById("heart_rate");
 
-const prgs1 = document.getElementById("prgs1");
-const prgs2 = document.getElementById("prgs2");
+const prgs = document.getElementById("prgs");
 
 // Hart rate sensor even handling
 if (HeartRateSensor) {
@@ -68,6 +67,6 @@ clock.ontick = (evt) => {
     battery_level_element.style.fill = "white";
   }
   //console.log(battery_level_element.text)
-  prgs1.sweepAngle = battery.chargeLevel;
+  prgs.sweepAngle = battery.chargeLevel;
 
 }

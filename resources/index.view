@@ -16,7 +16,5 @@
 
   <circle id="earth" cx="50%" cy="570" r="280" fill="#22acda" />
 
-  <arc id="prgs1" x="0" y="200" width="336" height="300" fill="fb-green" arc-width="9" start-angle="292" sweep-angle="3" />
-  <arc id="prgs2" x="0" y="-91" width="336" height="300" fill="fb-green" arc-width="9" start-angle="180" sweep-angle="0" />
-
+  <arc id="prgs" x="-10" y="258" width="360" height="360" fill="fb-green" arc-width="12" start-angle="312" sweep-angle="5" />
 </svg>
