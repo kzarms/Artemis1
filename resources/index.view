@@ -1,5 +1,28 @@
-<svg class="background">
-  <text id="appTime" />
-  <text id="bat_level" />
-  <text id="heart_rate" />
+<svg class="background" viewport-fill="black">
+  <text id="appTime"
+    fill="white"
+    font-family="System-Bold"
+    font-size="80"
+    text-anchor="middle"
+    text-length="32"
+    x="50%+15" y="20%">10:00</text>
+  <text id="bat_level" fill="white" font-size="24"
+    x="10%" y="12%">100%</text>
+  <text id="heart_rate" fill="white" font-size="24"
+    text-length="8"
+    x="10%" y="20%">60</text>
+
+  <circle id="earth" cx="50%" cy="775" r="500" fill="#22acda" />
+  <circle id="moon" cx="100%" cy="10%" r="40" fill="#afadb3" />
+
+  <line x1="27%" y1="260" x2="50%" y2="30%" fill="#545454" stroke-width="15" />
+
+  <arc id="path1" x="0" y="200" width="336" height="300" fill="#c01f2e" arc-width="9" start-angle="292" sweep-angle="68" />
+  <arc id="path2" x="0" y="-91" width="336" height="300" fill="#c01f2e" arc-width="9" start-angle="180" sweep-angle="-88" />
+
+  <line x1="72%" y1="260" x2="50%" y2="30%" fill="#545454" stroke-width="17" />
+
+  <arc id="prgs1" x="0" y="200" width="336" height="300" fill="fb-green" arc-width="9" start-angle="292" sweep-angle="3" />
+  <arc id="prgs2" x="0" y="-91" width="336" height="300" fill="fb-green" arc-width="9" start-angle="180" sweep-angle="0" />
+
 </svg>
