@@ -1,6 +1,7 @@
 import clock from "clock";
 import * as document from "document";
 import { battery } from 'power';
+import { display } from "display";
 import { HeartRateSensor } from 'heart-rate';
 import { preferences } from "user-settings";
 import * as util from "../common/utils";
@@ -34,6 +35,11 @@ if (HeartRateSensor) {
       heart_rate_element.style.fill = "red";
     }
   });
+  // Automatically stop the sensor when the screen is off to conserve battery
+  display.addEventListener("change", () => {
+    display.on ? hrm.start() : hrm.stop();
+  });
+  // First start
   hrm.start();
 } else {
   console.log("This device does NOT have a HeartRateSensor!");
