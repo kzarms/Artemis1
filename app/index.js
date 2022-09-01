@@ -3,8 +3,9 @@ import * as document from "document";
 import { battery } from 'power';
 import { display } from "display";
 import { HeartRateSensor } from 'heart-rate';
-import { preferences } from "user-settings";
+import { today } from "user-activity";
 import * as util from "../common/utils";
+import { data } from "jquery";
 
 const appTime = document.getElementById("appTime");
 
@@ -14,7 +15,10 @@ const earth = document.getElementById("earth");
 const moon = document.getElementById("moon");
 const prgs = document.getElementById("prgs");
 const prgsText = document.getElementById("prgsText");
+const dataText = document.getElementById("dataText");
 
+// Set global display value:
+let dataTextCurrent = 99
 // Set UTC time to start
 const artemisStart = new Date('2022-09-02T19-17-00');
 const artemisEnd = new Date('2022-10-10T12-00-00');
@@ -39,9 +43,35 @@ function missionProgress() {
   console.log(`Progress: ${String(progress)}`);
   return progress
 }
+
+function dataTextOnClick(){
+  if (dataTextCurrent === 0) {
+    // Steps on display switch to next
+    dataTextCurrent += 1;
+    console.log(`Flr: ${today.adjusted.elevationGain}`);
+    dataText.text = `Flr: ${today.adjusted.elevationGain}`;
+  } else if (dataTextCurrent === 1) {
+    dataTextCurrent += 1;
+    console.log(`Dst: ${today.adjusted.distance}`);
+    dataText.text = `Dst: ${today.adjusted.distance}`;
+  } else {
+    // Set back to the Steps
+    dataTextCurrent = 0;
+    // Steps
+    console.log(`Stp: ${today.adjusted.steps}`);
+    dataText.text = `Stp: ${today.adjusted.steps}`;
+  }
+}
+
+dataText.addEventListener("click", () => {
+  dataTextOnClick();
+});
+
 // Execution on start
 prgs.sweepAngle = missionProgress();
-prgsText.text = `${missionProgress()}%`;
+prgsText.text = `${prgs.sweepAngle}%`;
+
+dataTextOnClick();
 
 // Hart rate sensor even handling
 if (HeartRateSensor) {
@@ -89,10 +119,10 @@ display.addEventListener("change", () => {
 // Update the clock every second
 clock.granularity = "minutes";
 clock.ontick = (evt) => {
-  let today = evt.date;
-  let hours = today.getHours();
+  let todayTime = evt.date;
+  let hours = todayTime.getHours();
   hours = util.zeroPad(hours);
-  let mins = util.zeroPad(today.getMinutes());
+  let mins = util.zeroPad(todayTime.getMinutes());
   appTime.text = `${hours}:${mins}`;
 
   // Battery
