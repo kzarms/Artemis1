@@ -6,8 +6,6 @@
     text-anchor="middle"
     text-length="32"
     x="50%+15" y="20%">10:00</text>
-  <text id="appSec" fill="white" font-size="80"
-    x="81%" y="20%">.</text>
   <text id="bat_level" fill="white" font-size="24"
     x="10%" y="12%">100%</text>
   <text id="heart_rate" fill="white" font-size="24"
@@ -27,7 +25,7 @@
 
   <image x="0%" y="20%" href="artemis2.png" />
 
-  <arc id="prgs" x="-12" y="260" width="364" height="364" fill="fb-green" arc-width="10" start-angle="312" sweep-angle="53">
-    <animate attributeName="sweep-angle" begin="load" from="0" to="100" dur="1" />
+  <arc id="prgs" x="-12" y="260" width="364" height="364" fill="fb-green" arc-width="10" start-angle="312" sweep-angle="0">
   </arc>
+  <text id="prgsText" fill="white" font-size="18" text-anchor="middle" text-length="4" x="50%" y="75%">22</text>
 </svg>

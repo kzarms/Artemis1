@@ -7,12 +7,41 @@ import { preferences } from "user-settings";
 import * as util from "../common/utils";
 
 const appTime = document.getElementById("appTime");
-const appSec = document.getElementById("appSec");
+
 const battery_level_element = document.getElementById("bat_level");
 const heart_rate_element = document.getElementById("heart_rate");
 const earth = document.getElementById("earth");
 const moon = document.getElementById("moon");
 const prgs = document.getElementById("prgs");
+const prgsText = document.getElementById("prgsText");
+
+// Set UTC time to start
+const artemisStart = new Date('2022-09-02T19-17-00');
+const artemisEnd = new Date('2022-10-10T12-00-00');
+// Calculate static mission time in seconds
+const missionSeconds = Math.floor((artemisEnd - artemisStart) / 1000);
+
+function missionProgress() {
+  const nowTime = Date.now();
+  if(nowTime < artemisStart ){
+    console.log("Mission is not started yet");
+    return 0
+  }
+  if (nowTime > artemisEnd) {
+    console.log("Mission has been completed");
+    return 100
+  }
+  // Calculate progress
+  console.log(`Mission time T: ${String(missionSeconds)} seconds`);
+  const nowSeconds = Math.floor((nowTime - artemisStart) / 1000);
+  console.log(`Mission time C: ${String(nowSeconds)} seconds`);
+  const progress = Math.floor(nowSeconds/missionSeconds*100);
+  console.log(`Progress: ${String(progress)}`);
+  return progress
+}
+// Execution on start
+prgs.sweepAngle = missionProgress();
+prgsText.text = `${missionProgress()}%`;
 
 // Hart rate sensor even handling
 if (HeartRateSensor) {
@@ -49,6 +78,8 @@ display.addEventListener("change", () => {
   if(display.on) {
     earth.animate("enable");
     moon.animate("enable");
+    prgs.sweepAngle = missionProgress();
+    prgsText.text = `${missionProgress()}%`;
   } else {
     earth.animate("disable");
     moon.animate("disable");
@@ -56,25 +87,14 @@ display.addEventListener("change", () => {
 });
 
 // Update the clock every second
-clock.granularity = "seconds";
+clock.granularity = "minutes";
 clock.ontick = (evt) => {
   let today = evt.date;
   let hours = today.getHours();
-  let seconds = today.getSeconds();
-  if (preferences.clockDisplay === "12h") {
-    // 12h format
-    hours = hours % 12 || 12;
-  } else {
-    // 24h format
-    hours = util.zeroPad(hours);
-  }
+  hours = util.zeroPad(hours);
   let mins = util.zeroPad(today.getMinutes());
   appTime.text = `${hours}:${mins}`;
-  if(seconds % 2){
-    appSec.text = "";
-  } else {
-    appSec.text = ".";
-  }
+
   // Battery
   battery_level_element.text = Math.floor(battery.chargeLevel) + "%";
   if (battery.chargeLevel < 10) {
@@ -83,6 +103,5 @@ clock.ontick = (evt) => {
     battery_level_element.style.fill = "white";
   }
   //console.log(battery_level_element.text)
-  prgs.sweepAngle = battery.chargeLevel;
 
 }
