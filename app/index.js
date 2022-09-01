@@ -67,12 +67,6 @@ dataText.addEventListener("click", () => {
   dataTextOnClick();
 });
 
-// Execution on start
-prgs.sweepAngle = missionProgress();
-prgsText.text = `${prgs.sweepAngle}%`;
-
-dataTextOnClick();
-
 // Hart rate sensor even handling
 if (HeartRateSensor) {
   console.log("This device has a HeartRateSensor!");
@@ -135,3 +129,12 @@ clock.ontick = (evt) => {
   //console.log(battery_level_element.text)
 
 }
+
+// Execution on start
+prgs.sweepAngle = missionProgress();
+prgsText.text = `${prgs.sweepAngle}%`;
+// Update data text
+dataTextOnClick();
+// Run animation once
+earth.animate("enable");
+moon.animate("enable");

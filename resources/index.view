@@ -12,11 +12,11 @@
     text-length="12"
     x="10%" y="20%">60</text>
 
-  <circle id="earth" cx="50%" cy="468" r="200" fill="#22acda">
+  <circle id="earth" cx="50%" cy="500" r="200" fill="#22acda">
     <animate attributeName="cy" begin="enable" from="500" to="468" dur="1" />
   </circle>
 
-  <circle id="moon" cx="205" cy="128" r="28" fill="#afadb3">
+  <circle id="moon" cx="180" cy="145" r="28" fill="#afadb3">
     <animate attributeName="cx" begin="enable" from="180" to="205" dur="1" />
     <animate attributeName="cy" begin="enable" from="145" to="128" dur="1" />
   </circle>
