@@ -5,7 +5,6 @@ import { display } from "display";
 import { HeartRateSensor } from 'heart-rate';
 import { today } from "user-activity";
 import * as util from "../common/utils";
-import { data } from "jquery";
 
 const appTime = document.getElementById("appTime");
 
@@ -18,7 +17,7 @@ const prgsText = document.getElementById("prgsText");
 const dataText = document.getElementById("dataText");
 
 // Set global display value:
-let dataTextCurrent = 99
+let dataTextCurrent = 0
 // Set UTC time to start
 const artemisStart = new Date('2022-09-02T19-17-00');
 const artemisEnd = new Date('2022-10-10T12-00-00');
@@ -44,27 +43,29 @@ function missionProgress() {
   return progress
 }
 
-function dataTextOnClick(){
+function dataTextUpdate(){
   if (dataTextCurrent === 0) {
-    // Steps on display switch to next
-    dataTextCurrent += 1;
-    console.log(`Flr: ${today.adjusted.elevationGain}`);
-    dataText.text = `Flr: ${today.adjusted.elevationGain}`;
-  } else if (dataTextCurrent === 1) {
-    dataTextCurrent += 1;
-    console.log(`Dst: ${today.adjusted.distance}`);
-    dataText.text = `Dst: ${today.adjusted.distance}`;
-  } else {
-    // Set back to the Steps
-    dataTextCurrent = 0;
     // Steps
-    console.log(`Stp: ${today.adjusted.steps}`);
+    //console.log(`Stp: ${today.adjusted.steps}`);
     dataText.text = `Stp: ${today.adjusted.steps}`;
+  } else if (dataTextCurrent === 1) {
+    // Floors on display switch to next
+    //console.log(`Flr: ${today.adjusted.elevationGain}`);
+    dataText.text = `Flr: ${today.adjusted.elevationGain}`;
+  } else {
+    // Distance
+    //console.log(`Dst: ${today.adjusted.distance}`);
+    dataText.text = `Dst: ${today.adjusted.distance}`;
   }
 }
 
 dataText.addEventListener("click", () => {
-  dataTextOnClick();
+  if (dataTextCurrent < 2) {
+    dataTextCurrent += 1;
+  } else {
+    dataTextCurrent = 0;
+  }
+  dataTextUpdate();
 });
 
 // Hart rate sensor even handling
@@ -111,7 +112,7 @@ display.addEventListener("change", () => {
 });
 
 // Update the clock every second
-clock.granularity = "minutes";
+clock.granularity = "seconds";
 clock.ontick = (evt) => {
   let todayTime = evt.date;
   let hours = todayTime.getHours();
@@ -127,14 +128,15 @@ clock.ontick = (evt) => {
     battery_level_element.style.fill = "white";
   }
   //console.log(battery_level_element.text)
-
+  // Data Info
+  dataTextUpdate();
 }
 
 // Execution on start
 prgs.sweepAngle = missionProgress();
 prgsText.text = `${prgs.sweepAngle}%`;
 // Update data text
-dataTextOnClick();
+dataTextUpdate();
 // Run animation once
 earth.animate("enable");
 moon.animate("enable");
