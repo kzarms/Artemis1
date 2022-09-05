@@ -1,7 +1,10 @@
 {
   "devDependencies": {
     "@fitbit/sdk": "^6.1.0",
-    "@fitbit/sdk-cli": "^1.7.3"
+    "@fitbit/sdk-cli": "^1.7.3",
+    "eslint": "^8.23.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
   },
   "fitbit": {
     "appUUID": "f68ad79f-5195-4d69-a3cb-6f04839c0b78",
@@ -12,7 +15,7 @@
     "requestedPermissions": [
       "access_activity",
       "access_internet",
-			"access_heart_rate",
+      "access_heart_rate",
       "access_user_profile",
       "run_background"
     ],
@@ -29,7 +32,9 @@
   },
   "scripts": {
     "build": "./node_modules/@fitbit/sdk/bin/fitbit-build.js",
-    "start": " ./node_modules/@fitbit/sdk-cli/lib/cli.js",
-    "build-global": "fitbit-build"
+    "fb": "fitbit",
+    "lint": "eslint --ext .js app",
+    "lintf": "eslint --fix --ext .js app",
+    "start": " ./node_modules/@fitbit/sdk-cli/lib/cli.js"
   }
 }
