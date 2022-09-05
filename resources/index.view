@@ -19,7 +19,7 @@
     text-length="4"
     x="83%" y="20%">Sun</text>
 
-  <circle id="earth" cx="50%" cy="500" r="200" fill="#22acda">
+  <circle id="earth" cx="51%" cy="500" r="202" fill="#22acda">
     <animate attributeName="cy" begin="enable" from="500" to="468" dur="1" />
   </circle>
 
@@ -27,13 +27,12 @@
     <animate attributeName="cx" begin="enable" from="180" to="205" dur="1" />
     <animate attributeName="cy" begin="enable" from="145" to="128" dur="1" />
   </circle>
-
   <line id="moon_shadow" x1="178" y1="108" x2="205" y2="164" fill="black" stroke-width="25" />
   <rect x="150" y="110" width="40" height="70" fill="black" />
 
   <image href="artemis2.png" x="0%" y="20%" />
 
-  <arc id="prgs" x="-12" y="260" width="364" height="364" fill="fb-green" arc-width="10" start-angle="312" sweep-angle="0" />
+  <arc id="prgs" x="-13" y="258" width="364" height="364" fill="fb-green" arc-width="10" start-angle="312" sweep-angle="100" />
   <text id="prgsText" fill="white" font-size="18" text-anchor="middle" text-length="4" x="50%" y="75%">22</text>
 
   <image id="data_icon" href="icons/steps_36px.png" width="30" height="30"
