@@ -33,8 +33,8 @@
   "scripts": {
     "build": "./node_modules/@fitbit/sdk/bin/fitbit-build.js",
     "fb": "fitbit",
-    "lint": "eslint --ext .js app",
-    "lintf": "eslint --fix --ext .js app",
+    "lint": "eslint --ext .js app common",
+    "lintf": "eslint --fix --ext .js app common",
     "start": " ./node_modules/@fitbit/sdk-cli/lib/cli.js"
   }
 }

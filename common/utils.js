@@ -1,7 +1,12 @@
+// utils.js
+
 // Add zero in front of numbers < 10
-export function zeroPad(i) {
-  if (i < 10) {
-    i = "0" + i;
+function zeroPad(i) {
+  let result = i;
+  if (result < 10) {
+    result = `0${result}`;
   }
-  return i;
+  return result;
 }
+
+export default zeroPad;
