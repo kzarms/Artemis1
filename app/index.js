@@ -17,15 +17,18 @@ const earth = document.getElementById("earth");
 const moon = document.getElementById("moon");
 const prgs = document.getElementById("prgs");
 const prgsText = document.getElementById("prgsText");
-const dataText = document.getElementById("dataText");
+const data_text = document.getElementById("data_text");
+const data_icon = document.getElementById("data_icon");
 
 // Set days array
-let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+// Set data icons array
+const data_icons_array = ["steps_36px.png", "floors_36px.png", "distance_36px.png"];
 // Set global display value:
-let dataTextCurrent = 0
+let data_info_current_index = 0
 // Set UTC time to start
-const artemisStart = new Date('2022-09-02T19-17-00');
-const artemisEnd = new Date('2022-10-10T12-00-00');
+const artemisStart = new Date('2022-10-02T19-17-00');
+const artemisEnd = new Date('2022-11-10T12-00-00');
 // Calculate static mission time in seconds
 const missionSeconds = Math.floor((artemisEnd - artemisStart) / 1000);
 
@@ -48,29 +51,31 @@ function missionProgress() {
   return progress
 }
 
-function dataTextUpdate(){
-  if (dataTextCurrent === 0) {
+function dataInfoUpdate(){
+  if (data_info_current_index === 0) {
     // Steps
-    //console.log(`Stp: ${today.adjusted.steps}`);
-    dataText.text = `Stp: ${today.adjusted.steps}`;
-  } else if (dataTextCurrent === 1) {
+    data_text.text = today.adjusted.steps;
+  } else if (data_info_current_index === 1) {
     // Floors on display switch to next
-    //console.log(`Flr: ${today.adjusted.elevationGain}`);
-    dataText.text = `Flr: ${today.adjusted.elevationGain}`;
+    data_text.text = today.adjusted.elevationGain;
   } else {
     // Distance
-    //console.log(`Dst: ${today.adjusted.distance}`);
-    dataText.text = `Dst: ${today.adjusted.distance}`;
+    data_text.text = today.adjusted.distance;
   }
+  // Set proper icon
+  data_icon.href = `icons/${data_icons_array[data_info_current_index]}`;
+  // Set position as (30px + 2px) from the current text item.
+  data_icon.x = data_text.getBBox().x - 32;
+  // console.log(data_text.getBBox().x);
 }
 
-dataText.addEventListener("click", () => {
-  if (dataTextCurrent < 2) {
-    dataTextCurrent += 1;
+data_text.addEventListener("click", () => {
+  if (data_info_current_index < 2) {
+    data_info_current_index += 1;
   } else {
-    dataTextCurrent = 0;
+    data_info_current_index = 0;
   }
-  dataTextUpdate();
+  dataInfoUpdate();
 });
 
 // Hart rate sensor even handling
@@ -148,14 +153,14 @@ clock.ontick = (evt) => {
   }
   //console.log(battery_level_element.text)
   // Data Info
-  dataTextUpdate();
+  dataInfoUpdate();
 }
 
 // Execution on start
 prgs.sweepAngle = missionProgress();
 prgsText.text = `${prgs.sweepAngle}%`;
 // Update data text
-dataTextUpdate();
+dataInfoUpdate();
 // Run animation once
 earth.animate("enable");
 moon.animate("enable");

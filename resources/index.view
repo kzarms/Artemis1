@@ -35,5 +35,14 @@
 
   <arc id="prgs" x="-12" y="260" width="364" height="364" fill="fb-green" arc-width="10" start-angle="312" sweep-angle="0" />
   <text id="prgsText" fill="white" font-size="18" text-anchor="middle" text-length="4" x="50%" y="75%">22</text>
-  <text id="dataText" fill="black" font-size="24" pointer-events="visible" text-anchor="middle" text-length="16" x="50%" y="95%" >Stp: 0</text>
+
+  <image id="data_icon" href="icons/steps_36px.png" width="30" height="30"
+    x="95" y="87%" />
+  <text id="data_text"
+    fill="black"
+    font-size="36"
+    pointer-events="visible"
+    text-anchor="middle"
+    text-length="16"
+    x="50%" y="95%">0</text>
 </svg>
