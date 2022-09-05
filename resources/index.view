@@ -1,16 +1,23 @@
 <svg class="background" viewport-fill="black">
-  <text id="appTime"
+  <text id="app_time"
     fill="white"
     font-family="System-Bold"
     font-size="80"
     text-anchor="middle"
     text-length="32"
-    x="50%+15" y="20%">10:00</text>
+    x="50%+10" y="20%">10:00</text>
   <text id="bat_level" fill="white" font-size="24"
+    text-length="8"
     x="10%" y="12%">100%</text>
   <text id="heart_rate" fill="white" font-size="24"
     text-length="12"
     x="10%" y="20%">60</text>
+  <text id="week_day" fill="white" font-size="24"
+    text-length="4"
+    x="80%" y="12%">Sun</text>
+  <text id="date_day" fill="white" font-size="24"
+    text-length="4"
+    x="80%" y="20%">08</text>
 
   <circle id="earth" cx="50%" cy="500" r="200" fill="#22acda">
     <animate attributeName="cy" begin="enable" from="500" to="468" dur="1" />
@@ -20,13 +27,13 @@
     <animate attributeName="cx" begin="enable" from="180" to="205" dur="1" />
     <animate attributeName="cy" begin="enable" from="145" to="128" dur="1" />
   </circle>
+
   <line id="moon_shadow" x1="178" y1="108" x2="205" y2="164" fill="black" stroke-width="25" />
   <rect x="150" y="110" width="40" height="70" fill="black" />
 
-  <image x="0%" y="20%" href="artemis2.png" />
+  <image href="artemis2.png" x="0%" y="20%" />
 
-  <arc id="prgs" x="-12" y="260" width="364" height="364" fill="fb-green" arc-width="10" start-angle="312" sweep-angle="0">
-  </arc>
+  <arc id="prgs" x="-12" y="260" width="364" height="364" fill="fb-green" arc-width="10" start-angle="312" sweep-angle="0" />
   <text id="prgsText" fill="white" font-size="18" text-anchor="middle" text-length="4" x="50%" y="75%">22</text>
   <text id="dataText" fill="black" font-size="24" pointer-events="visible" text-anchor="middle" text-length="16" x="50%" y="95%" >Stp: 0</text>
 </svg>

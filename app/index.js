@@ -6,16 +6,20 @@ import { HeartRateSensor } from 'heart-rate';
 import { today } from "user-activity";
 import * as util from "../common/utils";
 
-const appTime = document.getElementById("appTime");
-
+const app_time = document.getElementById("app_time");
 const battery_level_element = document.getElementById("bat_level");
 const heart_rate_element = document.getElementById("heart_rate");
+const week_day = document.getElementById("week_day");
+const date_day = document.getElementById("date_day");
+
 const earth = document.getElementById("earth");
 const moon = document.getElementById("moon");
 const prgs = document.getElementById("prgs");
 const prgsText = document.getElementById("prgsText");
 const dataText = document.getElementById("dataText");
 
+// Set days array
+let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 // Set global display value:
 let dataTextCurrent = 0
 // Set UTC time to start
@@ -111,14 +115,21 @@ display.addEventListener("change", () => {
   }
 });
 
-// Update the clock every second
+// Update the clock every minute
+// clock.granularity = "minutes";
 clock.granularity = "seconds";
+
 clock.ontick = (evt) => {
-  let todayTime = evt.date;
-  let hours = todayTime.getHours();
+  let today_time = evt.date;
+  // Set time
+  let hours = today_time.getHours();
   hours = util.zeroPad(hours);
-  let mins = util.zeroPad(todayTime.getMinutes());
-  appTime.text = `${hours}:${mins}`;
+  let mins = util.zeroPad(today_time.getMinutes());
+  app_time.text = `${hours}:${mins}`;
+
+  // Set day and date
+  week_day.text = days[today_time.getDay()];
+  date_day.text = util.zeroPad(today_time.getDate());
 
   // Battery
   battery_level_element.text = Math.floor(battery.chargeLevel) + "%";
