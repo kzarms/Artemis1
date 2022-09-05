@@ -1,4 +1,10 @@
 <svg class="background" viewport-fill="black">
+  <text id="bat_level" fill="white" font-size="24"
+    text-length="8"
+    x="10%" y="12%">100%</text>
+  <text id="heart_rate" fill="white" font-size="24"
+    text-length="12"
+    x="10%" y="20%">60</text>
   <text id="app_time"
     fill="white"
     font-family="System-Bold"
@@ -6,18 +12,12 @@
     text-anchor="middle"
     text-length="32"
     x="50%+10" y="20%">10:00</text>
-  <text id="bat_level" fill="white" font-size="24"
-    text-length="8"
-    x="10%" y="12%">100%</text>
-  <text id="heart_rate" fill="white" font-size="24"
-    text-length="12"
-    x="10%" y="20%">60</text>
-  <text id="week_day" fill="white" font-size="24"
-    text-length="4"
-    x="80%" y="12%">Sun</text>
   <text id="date_day" fill="white" font-size="24"
     text-length="4"
-    x="80%" y="20%">08</text>
+    x="83%" y="12%">08</text>
+  <text id="week_day" fill="white" font-size="24"
+    text-length="4"
+    x="83%" y="20%">Sun</text>
 
   <circle id="earth" cx="50%" cy="500" r="200" fill="#22acda">
     <animate attributeName="cy" begin="enable" from="500" to="468" dur="1" />

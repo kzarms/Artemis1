@@ -78,14 +78,16 @@ if (HeartRateSensor) {
   console.log("This device has a HeartRateSensor!");
   const hrm = new HeartRateSensor();
   hrm.addEventListener("reading", () => {
-    //console.log(`Current heart rate: ${hrm.heartRate}`);
-    if (hrm.heartRate === null) {
+    // Set color based on user profile
+    let hrRate = hrm.heartRate;
+    let hrZone = user.heartRateZone(hrRate);
+    // Set HR value
+    if (hrRate === null) {
       heart_rate_element.text = "--❤️";
     } else {
-      heart_rate_element.text = hrm.heartRate + "❤️";
+      heart_rate_element.text = hrRate + "❤️";
     }
-    // Set color based on user profile
-    let hrZone = user.heartRateZone(hrm.heartRate);
+    // Set HR color
     if (hrZone === "fat-burn"){
       heart_rate_element.style.fill = "fb-yellow";
     } else if (hrZone === "cardio") {
@@ -95,7 +97,7 @@ if (HeartRateSensor) {
     } else {
       heart_rate_element.style.fill = "white";
     }
-    console.log(hrZone);
+    // console.log(hrZone);
   });
   // Automatically stop the sensor when the screen is off to conserve battery
   display.addEventListener("change", () => {
@@ -120,8 +122,7 @@ display.addEventListener("change", () => {
   }
 });
 
-// Update the clock every minute
-// clock.granularity = "minutes";
+// Update the clock every second
 clock.granularity = "seconds";
 
 clock.ontick = (evt) => {
