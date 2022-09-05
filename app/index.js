@@ -4,6 +4,7 @@ import { battery } from 'power';
 import { display } from "display";
 import { HeartRateSensor } from 'heart-rate';
 import { today } from "user-activity";
+import { user } from "user-profile";
 import * as util from "../common/utils";
 
 const app_time = document.getElementById("app_time");
@@ -80,17 +81,21 @@ if (HeartRateSensor) {
     //console.log(`Current heart rate: ${hrm.heartRate}`);
     if (hrm.heartRate === null) {
       heart_rate_element.text = "--❤️";
-    } else if (hrm.heartRate < 100) {
+    } else {
       heart_rate_element.text = hrm.heartRate + "❤️";
+    }
+    // Set color based on user profile
+    let hrZone = user.heartRateZone(hrm.heartRate);
+    if (hrZone === "fat-burn"){
+      heart_rate_element.style.fill = "fb-yellow";
+    } else if (hrZone === "cardio") {
+      heart_rate_element.style.fill = "fb-orange";
+    } else if (hrZone === "peak") {
+      heart_rate_element.style.fill = "fb-red";
+    } else {
       heart_rate_element.style.fill = "white";
-    } else if (hrm.heartRate < 150) {
-      heart_rate_element.text = hrm.heartRate + "❤️";
-      heart_rate_element.style.fill = "yellow";
     }
-    else {
-      heart_rate_element.text = hrm.heartRate + "❤️";
-      heart_rate_element.style.fill = "red";
-    }
+    console.log(hrZone);
   });
   // Automatically stop the sensor when the screen is off to conserve battery
   display.addEventListener("change", () => {
@@ -134,7 +139,9 @@ clock.ontick = (evt) => {
   // Battery
   battery_level_element.text = Math.floor(battery.chargeLevel) + "%";
   if (battery.chargeLevel < 10) {
-		battery_level_element.style.fill = "red";
+		battery_level_element.style.fill = "fb-red";
+	} else if (battery.chargeLevel < 20) {
+		battery_level_element.style.fill = "fb-orange";
 	} else {
     battery_level_element.style.fill = "white";
   }
