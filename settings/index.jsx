@@ -1,4 +1,13 @@
-function Colors(props) {
+import * as util from '../common/utils';
+
+const today = new Date();
+const today_14days = new Date(Date.now() + 12096e5);
+
+function generatePlaceholder(date){
+    return `${util.zeroPad(date.getDate())}.${util.zeroPad(date.getMonth())}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+}
+
+function setSettings(props) {
     return (
         <Page>
             <Toggle
@@ -7,16 +16,17 @@ function Colors(props) {
             />
             <Section
                 title={<Text bold align="center">Set start and end time</Text>}>
+                <Text>Put you data and time in following format: "day.month.year hour:minute"</Text>
+                <Text>Example: 22.10.2022 14:55</Text>
                 <TextInput
-                    action="Add Item"
                     label="Start time"
-                    placeholder="09.09.2022 10:00"
+                    placeholder={generatePlaceholder(today)}
                     settingsKey="start_time"
+                    onChange
                 />
                 <TextInput
-                    action="Add Item"
                     label="End time"
-                    placeholder="09.09.2022 10:00"
+                    placeholder={generatePlaceholder(today_14days)}
                     settingsKey="end_time"
                 />
             </Section>
@@ -38,4 +48,4 @@ function Colors(props) {
     );
 }
 
-registerSettingsPage(Colors);
+registerSettingsPage(setSettings);

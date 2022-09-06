@@ -3,6 +3,7 @@ import * as messaging from 'messaging';
 import { me as companion } from 'companion';
 
 const MOON_COLOR = 'moon_color';
+const ANIMATION = 'animation';
 
 function sendSettingData(data) {
   // If we have a MessageSocket, send the data to the device
@@ -30,4 +31,7 @@ settingsStorage.addEventListener('change', (evt) => {
 if (companion.launchReasons.settingsChanged) {
   // Send the value of the setting
   sendValue(MOON_COLOR, settingsStorage.getItem(MOON_COLOR));
+  sendValue(ANIMATION, settingsStorage.getItem(ANIMATION));
 }
+// Set enable automation as true by default
+settingsStorage.setItem(ANIMATION, true);

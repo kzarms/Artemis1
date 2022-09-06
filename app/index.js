@@ -25,8 +25,10 @@ const data_icon = document.getElementById('data_icon');
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 // Set data icons array
 const data_icons_array = ['steps_36px.png', 'floors_36px.png', 'distance_36px.png'];
+
 // Set global display value:
 let data_info_current_index = 0;
+let settings_animation = true;
 // Set UTC time to start
 const artemisStart = new Date('2022-10-02T19-17-00');
 const artemisEnd = new Date('2022-11-10T12-00-00');
@@ -70,10 +72,21 @@ function dataInfoUpdate() {
   // console.log(data_text.getBBox().x);
 }
 
+function animation() {
+  if (settings_animation) {
+    earth.animate('enable');
+    moon.animate('enable');
+  }
+}
+
 messaging.peerSocket.addEventListener('message', (evt) => {
   if (evt && evt.data && evt.data.key === 'moon_color') {
     moon.style.fill = evt.data.value;
   }
+  if (evt && evt.data && evt.data.key === 'animation') {
+    settings_animation = evt.data.value;
+  }
+  console.log(evt.data.value);
 });
 
 data_text.addEventListener('click', () => {
@@ -128,14 +141,10 @@ if (HeartRateSensor) {
 // Set automation for display on and off
 display.addEventListener('change', () => {
   if (display.on) {
-    earth.animate('enable');
-    moon.animate('enable');
+    animation();
     prgs.sweepAngle = missionProgress();
     // prgs.sweepAngle = battery.chargeLevel;
     prgsText.text = `${missionProgress()}%`;
-  } else {
-    earth.animate('disable');
-    moon.animate('disable');
   }
 });
 
@@ -174,5 +183,4 @@ prgsText.text = `${prgs.sweepAngle}%`;
 // Update data text
 dataInfoUpdate();
 // Run animation once
-earth.animate('enable');
-moon.animate('enable');
+animation();
