@@ -124,7 +124,7 @@ display.addEventListener('change', () => {
     earth.animate('enable');
     moon.animate('enable');
     prgs.sweepAngle = missionProgress();
-    //prgs.sweepAngle = battery.chargeLevel;
+    // prgs.sweepAngle = battery.chargeLevel;
     prgsText.text = `${missionProgress()}%`;
   } else {
     earth.animate('disable');
