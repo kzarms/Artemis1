@@ -36,7 +36,7 @@ let mission_end = new Date('2022-11-10T12-00-00');
 function missionProgress() {
   if (mission_start === '' || mission_end === '') {
     // No proper date. Turn off
-    console.log("One of the value is empty");
+    console.log('One of the value is empty');
     prgsText.text = '';
     prgs.sweepAngle = 0;
     return;
