@@ -30,28 +30,41 @@ const data_icons_array = ['steps_36px.png', 'floors_36px.png', 'distance_36px.pn
 let data_info_current_index = 0;
 let settings_animation = true;
 // Set UTC time to start
-const artemisStart = new Date('2022-10-02T19-17-00');
-const artemisEnd = new Date('2022-11-10T12-00-00');
-// Calculate static mission time in seconds
-const missionSeconds = Math.floor((artemisEnd - artemisStart) / 1000);
+let mission_start = new Date('2022-10-02T19-17-00');
+let mission_end = new Date('2022-11-10T12-00-00');
 
 function missionProgress() {
+  // Calculate mission time in minutes
+  const mission_minutes = Math.floor((mission_end - mission_start) / 60000);
+  if (mission_minutes < 0) {
+    // Negative value. Remove everything.
+    // prgsText.text
+  }
+
   const nowTime = Date.now();
-  if (nowTime < artemisStart) {
+  if (nowTime < mission_start) {
     console.log('Mission is not started yet');
-    return 0;
+    prgsText.opacity = 0;
+    prgs.sweepAngle = 0;
+    return;
   }
-  if (nowTime > artemisEnd) {
+  // Enable visibility
+  prgsText.opacity = 1;
+  if (nowTime > mission_end) {
     console.log('Mission has been completed');
-    return 100;
+    prgsText.text = 'Done!';
+    prgs.sweepAngle = 100;
+    return
   }
-  // Calculate progress
-  console.log(`Mission time T: ${String(missionSeconds)} seconds`);
-  const nowSeconds = Math.floor((nowTime - artemisStart) / 1000);
-  console.log(`Mission time C: ${String(nowSeconds)} seconds`);
-  const progress = Math.floor((nowSeconds / missionSeconds) * 100);
+  // Calculate progress and update values
+  console.log(`Mission time T: ${String(mission_minutes)} minutes`);
+  const now_minutes = Math.floor((nowTime - mission_start) / 60000);
+  console.log(`Mission time C: ${String(now_minutes)} minutes`);
+  // Set map between minutes and progress
+  const progress = Math.floor((now_minutes / mission_minutes) * 100);
   console.log(`Progress: ${String(progress)}`);
-  return progress;
+  prgsText.text = `${String(progress)}%`;
+  prgs.sweepAngle = progress;
 }
 
 function dataInfoUpdate() {
@@ -80,13 +93,27 @@ function animation() {
 }
 
 messaging.peerSocket.addEventListener('message', (evt) => {
+  console.log(evt.data.value);
   if (evt && evt.data && evt.data.key === 'moon_color') {
     moon.style.fill = evt.data.value;
   }
   if (evt && evt.data && evt.data.key === 'animation') {
     settings_animation = evt.data.value;
   }
-  console.log(evt.data.value);
+  if (evt && evt.data && evt.data.key === 'start_time') {
+    if (evt.data.value !== '') {
+      // Set if we see not empty value
+      mission_start = new Date(evt.data.value);
+      missionProgress();
+    }
+  }
+  if (evt && evt.data && evt.data.key === 'end_time') {
+    if (evt.data.value !== '') {
+      // Set if we see not empty value
+      mission_end = new Date(evt.data.value);
+      missionProgress();
+    }
+  }
 });
 
 data_text.addEventListener('click', () => {
@@ -142,9 +169,7 @@ if (HeartRateSensor) {
 display.addEventListener('change', () => {
   if (display.on) {
     animation();
-    prgs.sweepAngle = missionProgress();
-    // prgs.sweepAngle = battery.chargeLevel;
-    prgsText.text = `${missionProgress()}%`;
+    missionProgress();
   }
 });
 
@@ -178,8 +203,7 @@ clock.ontick = (evt) => {
 };
 
 // Execution on start
-prgs.sweepAngle = missionProgress();
-prgsText.text = `${prgs.sweepAngle}%`;
+missionProgress();
 // Update data text
 dataInfoUpdate();
 // Run animation once

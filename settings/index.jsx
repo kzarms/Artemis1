@@ -1,8 +1,8 @@
 import * as util from '../common/utils';
-
+// Get dates as example
 const today = new Date();
 const today_14days = new Date(Date.now() + 12096e5);
-
+// Generate placeholder function
 function generatePlaceholder(date){
     return `${util.zeroPad(date.getDate())}.${util.zeroPad(date.getMonth())}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
 }
@@ -22,7 +22,6 @@ function setSettings(props) {
                     label="Start time"
                     placeholder={generatePlaceholder(today)}
                     settingsKey="start_time"
-                    onChange
                 />
                 <TextInput
                     label="End time"
