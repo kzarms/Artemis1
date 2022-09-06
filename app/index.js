@@ -34,27 +34,35 @@ let mission_start = new Date('2022-10-02T19-17-00');
 let mission_end = new Date('2022-11-10T12-00-00');
 
 function missionProgress() {
+  if (mission_start === '' || mission_end === '') {
+    // No proper date. Turn off
+    console.log("One of the value is empty");
+    prgsText.text = '';
+    prgs.sweepAngle = 0;
+    return;
+  }
   // Calculate mission time in minutes
   const mission_minutes = Math.floor((mission_end - mission_start) / 60000);
   if (mission_minutes < 0) {
     // Negative value. Remove everything.
-    // prgsText.text
-  }
-
-  const nowTime = Date.now();
-  if (nowTime < mission_start) {
-    console.log('Mission is not started yet');
-    prgsText.opacity = 0;
+    prgsText.text = '';
     prgs.sweepAngle = 0;
     return;
   }
+
   // Enable visibility
-  prgsText.opacity = 1;
+  const nowTime = Date.now();
+  if (nowTime < mission_start) {
+    console.log('Mission is not started yet');
+    prgsText.text = '0%';
+    prgs.sweepAngle = 0;
+    return;
+  }
   if (nowTime > mission_end) {
     console.log('Mission has been completed');
     prgsText.text = 'Done!';
     prgs.sweepAngle = 100;
-    return
+    return;
   }
   // Calculate progress and update values
   console.log(`Mission time T: ${String(mission_minutes)} minutes`);
@@ -104,15 +112,19 @@ messaging.peerSocket.addEventListener('message', (evt) => {
     if (evt.data.value !== '') {
       // Set if we see not empty value
       mission_start = new Date(evt.data.value);
-      missionProgress();
+    } else {
+      mission_start = '';
     }
+    missionProgress();
   }
   if (evt && evt.data && evt.data.key === 'end_time') {
     if (evt.data.value !== '') {
       // Set if we see not empty value
       mission_end = new Date(evt.data.value);
-      missionProgress();
+    } else {
+      mission_end = '';
     }
+    missionProgress();
   }
 });
 

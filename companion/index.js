@@ -14,12 +14,10 @@ function sendSettingData(data) {
   }
 }
 function sendValue(key, val) {
-  if (val) {
-    sendSettingData({
-      key,
-      value: val,
-    });
-  }
+  sendSettingData({
+    key,
+    value: val,
+  });
 }
 function parseData(evt) {
   const new_start_time = JSON.parse(evt.newValue).name;
