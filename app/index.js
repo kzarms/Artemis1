@@ -6,6 +6,7 @@ import { HeartRateSensor } from 'heart-rate';
 import { today } from 'user-activity';
 import { user } from 'user-profile';
 import * as util from '../common/utils';
+import * as messaging from "messaging";
 
 const app_time = document.getElementById('app_time');
 const battery_level_element = document.getElementById('bat_level');
@@ -68,6 +69,12 @@ function dataInfoUpdate() {
   data_icon.x = data_text.getBBox().x - 32;
   // console.log(data_text.getBBox().x);
 }
+
+messaging.peerSocket.addEventListener("message", (evt) => {
+  if (evt && evt.data && evt.data.key === "myColor") {
+    moon.style.fill = evt.data.value;
+  }
+});
 
 data_text.addEventListener('click', () => {
   if (data_info_current_index < 2) {
