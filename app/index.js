@@ -5,6 +5,7 @@ import { display } from 'display';
 import { HeartRateSensor } from 'heart-rate';
 import { today } from 'user-activity';
 import { user } from 'user-profile';
+import * as messaging from 'messaging';
 import * as util from '../common/utils';
 
 const app_time = document.getElementById('app_time');
@@ -24,31 +25,54 @@ const data_icon = document.getElementById('data_icon');
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 // Set data icons array
 const data_icons_array = ['steps_36px.png', 'floors_36px.png', 'distance_36px.png'];
+
 // Set global display value:
 let data_info_current_index = 0;
+let settings_animation = true;
 // Set UTC time to start
-const artemisStart = new Date('2022-10-02T19-17-00');
-const artemisEnd = new Date('2022-11-10T12-00-00');
-// Calculate static mission time in seconds
-const missionSeconds = Math.floor((artemisEnd - artemisStart) / 1000);
+let mission_start = '';
+let mission_end = '';
 
 function missionProgress() {
+  if (mission_start === '' || mission_end === '') {
+    // No proper date. Turn off
+    console.log('One of the value is empty');
+    prgsText.text = '';
+    prgs.sweepAngle = 0;
+    return;
+  }
+  // Calculate mission time in minutes
+  const mission_minutes = Math.floor((mission_end - mission_start) / 60000);
+  if (mission_minutes < 0) {
+    // Negative value. Remove everything.
+    prgsText.text = '';
+    prgs.sweepAngle = 0;
+    return;
+  }
+
+  // Enable visibility
   const nowTime = Date.now();
-  if (nowTime < artemisStart) {
+  if (nowTime < mission_start) {
     console.log('Mission is not started yet');
-    return 0;
+    prgsText.text = '0%';
+    prgs.sweepAngle = 0;
+    return;
   }
-  if (nowTime > artemisEnd) {
+  if (nowTime > mission_end) {
     console.log('Mission has been completed');
-    return 100;
+    prgsText.text = 'Done!';
+    prgs.sweepAngle = 100;
+    return;
   }
-  // Calculate progress
-  console.log(`Mission time T: ${String(missionSeconds)} seconds`);
-  const nowSeconds = Math.floor((nowTime - artemisStart) / 1000);
-  console.log(`Mission time C: ${String(nowSeconds)} seconds`);
-  const progress = Math.floor((nowSeconds / missionSeconds) * 100);
+  // Calculate progress and update values
+  console.log(`Mission time T: ${String(mission_minutes)} minutes`);
+  const now_minutes = Math.floor((nowTime - mission_start) / 60000);
+  console.log(`Mission time C: ${String(now_minutes)} minutes`);
+  // Set map between minutes and progress
+  const progress = Math.floor((now_minutes / mission_minutes) * 100);
   console.log(`Progress: ${String(progress)}`);
-  return progress;
+  prgsText.text = `${String(progress)}%`;
+  prgs.sweepAngle = progress;
 }
 
 function dataInfoUpdate() {
@@ -68,6 +92,41 @@ function dataInfoUpdate() {
   data_icon.x = data_text.getBBox().x - 32;
   // console.log(data_text.getBBox().x);
 }
+
+function animation() {
+  if (settings_animation) {
+    earth.animate('enable');
+    moon.animate('enable');
+  }
+}
+
+messaging.peerSocket.addEventListener('message', (evt) => {
+  // console.log(evt.data.value);
+  if (evt && evt.data && evt.data.key === 'moon_color') {
+    moon.style.fill = JSON.parse(evt.data.value);
+  }
+  if (evt && evt.data && evt.data.key === 'animation') {
+    settings_animation = JSON.parse(evt.data.value);
+  }
+  if (evt && evt.data && evt.data.key === 'start_time') {
+    if (evt.data.value !== '') {
+      // Set if we see not empty value
+      mission_start = new Date(evt.data.value);
+    } else {
+      mission_start = '';
+    }
+    missionProgress();
+  }
+  if (evt && evt.data && evt.data.key === 'end_time') {
+    if (evt.data.value !== '') {
+      // Set if we see not empty value
+      mission_end = new Date(evt.data.value);
+    } else {
+      mission_end = '';
+    }
+    missionProgress();
+  }
+});
 
 data_text.addEventListener('click', () => {
   if (data_info_current_index < 2) {
@@ -121,14 +180,8 @@ if (HeartRateSensor) {
 // Set automation for display on and off
 display.addEventListener('change', () => {
   if (display.on) {
-    earth.animate('enable');
-    moon.animate('enable');
-    prgs.sweepAngle = missionProgress();
-    // prgs.sweepAngle = battery.chargeLevel;
-    prgsText.text = `${missionProgress()}%`;
-  } else {
-    earth.animate('disable');
-    moon.animate('disable');
+    animation();
+    missionProgress();
   }
 });
 
@@ -162,10 +215,8 @@ clock.ontick = (evt) => {
 };
 
 // Execution on start
-prgs.sweepAngle = missionProgress();
-prgsText.text = `${prgs.sweepAngle}%`;
+missionProgress();
 // Update data text
 dataInfoUpdate();
 // Run animation once
-earth.animate('enable');
-moon.animate('enable');
+animation();
