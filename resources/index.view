@@ -33,7 +33,7 @@
   <image href="artemis.png" x="0%" y="20%" />
 
   <arc id="prgs" x="-13" y="258" width="364" height="364" fill="fb-green" arc-width="10" start-angle="312" sweep-angle="100" />
-  <text id="prgsText" fill="white" font-size="18" text-anchor="middle" text-length="4" x="50%" y="75%">22</text>
+  <text id="prgsText" fill="white" font-size="18" text-anchor="middle" text-length="4" x="50%" y="75%"></text>
 
   <image id="data_icon" href="icons/steps_36px.png" width="30" height="30"
     x="95" y="87%" />

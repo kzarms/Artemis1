@@ -4,35 +4,35 @@ const today = new Date();
 const today_14days = new Date(Date.now() + 12096e5);
 // Generate placeholder function
 function generatePlaceholder(date){
-    return `${util.zeroPad(date.getDate())}.${util.zeroPad(date.getMonth())}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+    return `${util.zeroPad(date.getDate())}.${util.zeroPad(date.getMonth())}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
 }
 
 function setSettings(props) {
     return (
         <Page>
             <Toggle
-                settingsKey="animation"
-                label="Enable Animation"
+                settingsKey='animation'
+                label='Enable Animation'
             />
             <Section
-                title={<Text bold align="center">Set start and end time</Text>}>
-                <Text>Put you data and time in following format: "day.month.year hour:minute"</Text>
-                <Text>Example: 22.10.2022 14:55</Text>
+                title={<Text bold align='center'>Set start and end time</Text>}>
+                <Text>Put you data and time in following format: 'day.month.year hour:minute'</Text>
+                <Text>Example: 15.12.2070 14:55</Text>
                 <TextInput
-                    label="Start time"
+                    label='Start time'
                     placeholder={generatePlaceholder(today)}
-                    settingsKey="start_time"
+                    settingsKey='start_time'
                 />
                 <TextInput
-                    label="End time"
+                    label='End time'
                     placeholder={generatePlaceholder(today_14days)}
-                    settingsKey="end_time"
+                    settingsKey='end_time'
                 />
             </Section>
             <Section
-                title={<Text bold align="center">Moon color</Text>}>
+                title={<Text bold align='center'>Moon color</Text>}>
                 <ColorSelect
-                settingsKey="moon_color"
+                settingsKey='moon_color'
                 colors={[
                     {color: '#afadb3'},
                     {color: 'sandybrown'},

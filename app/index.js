@@ -30,8 +30,8 @@ const data_icons_array = ['steps_36px.png', 'floors_36px.png', 'distance_36px.pn
 let data_info_current_index = 0;
 let settings_animation = true;
 // Set UTC time to start
-let mission_start = new Date('2022-10-02T19-17-00');
-let mission_end = new Date('2022-11-10T12-00-00');
+let mission_start = '';
+let mission_end = '';
 
 function missionProgress() {
   if (mission_start === '' || mission_end === '') {
@@ -101,12 +101,12 @@ function animation() {
 }
 
 messaging.peerSocket.addEventListener('message', (evt) => {
-  console.log(evt.data.value);
+  // console.log(evt.data.value);
   if (evt && evt.data && evt.data.key === 'moon_color') {
-    moon.style.fill = evt.data.value;
+    moon.style.fill = JSON.parse(evt.data.value);
   }
   if (evt && evt.data && evt.data.key === 'animation') {
-    settings_animation = evt.data.value;
+    settings_animation = JSON.parse(evt.data.value);
   }
   if (evt && evt.data && evt.data.key === 'start_time') {
     if (evt.data.value !== '') {
