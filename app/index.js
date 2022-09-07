@@ -5,6 +5,7 @@ import { display } from 'display';
 import { HeartRateSensor } from 'heart-rate';
 import { today } from 'user-activity';
 import { user } from 'user-profile';
+import { vibration } from "haptics";
 import * as messaging from 'messaging';
 import * as util from '../common/utils';
 
@@ -135,6 +136,7 @@ data_text.addEventListener('click', () => {
     data_info_current_index = 0;
   }
   dataInfoUpdate();
+  vibration.start("bump");
 });
 
 // Hart rate sensor even handling
