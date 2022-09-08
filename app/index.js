@@ -21,7 +21,8 @@ const prgs = document.getElementById('prgs');
 const prgsText = document.getElementById('prgsText');
 const data_text = document.getElementById('data_text');
 const data_icon = document.getElementById('data_icon');
-
+// Set sensors
+const hrm = new HeartRateSensor();
 // Set days array
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 // Set data icons array
@@ -119,48 +120,6 @@ function batteryUpdate(){
 // Main function to run all logic
 function main(){
   // Start event listeners
-  data_text.addEventListener('click', () => {
-    if (data_info_current_index < 2) {
-      data_info_current_index += 1;
-    } else {
-      data_info_current_index = 0;
-    }
-    dataInfoUpdate();
-    vibration.start('bump');
-  });
-
-  // Hart rate sensor even handling
-  if (HeartRateSensor) {
-    console.log('This device has a HeartRateSensor!');
-    const hrm = new HeartRateSensor();
-    hrm.addEventListener('reading', () => {
-      // Set color based on user profile
-      const hrRate = hrm.heartRate;
-      const hrZone = user.heartRateZone(hrRate);
-      // Set HR value
-      if (hrRate === null) {
-        heart_rate_element.text = '--❤️';
-      } else {
-        heart_rate_element.text = `${hrRate}❤️`;
-      }
-      // Set HR color
-      if (hrZone === 'fat-burn') {
-        heart_rate_element.style.fill = 'fb-yellow';
-      } else if (hrZone === 'cardio') {
-        heart_rate_element.style.fill = 'fb-orange';
-      } else if (hrZone === 'peak') {
-        heart_rate_element.style.fill = 'fb-red';
-      } else {
-        heart_rate_element.style.fill = 'white';
-      }
-      // console.log(hrZone);
-    });
-    // First start
-    hrm.start();
-  } else {
-    console.log('This device does NOT have a HeartRateSensor!');
-  }
-
   display.addEventListener('change', () => {
     if (display.on) {
       animation();
@@ -172,13 +131,45 @@ function main(){
     }
   });
 
-  battery.addEventListener('change', () => {
-    console.log("Battery event!")
-    batteryUpdate();
+  data_text.addEventListener('click', () => {
+    if (data_info_current_index < 2) {
+      data_info_current_index += 1;
+    } else {
+      data_info_current_index = 0;
+    }
+    dataInfoUpdate();
+    vibration.start('bump');
   });
 
+  // Hart rate sensor even handling
+  hrm.addEventListener('reading', () => {
+    // Set color based on user profile
+    const hrRate = hrm.heartRate;
+    const hrZone = user.heartRateZone(hrRate);
+    // Set HR value
+    if (hrRate === null) {
+      heart_rate_element.text = '--❤️';
+    } else {
+      heart_rate_element.text = `${hrRate}❤️`;
+    }
+    // Set HR color
+    if (hrZone === 'fat-burn') {
+      heart_rate_element.style.fill = 'fb-yellow';
+    } else if (hrZone === 'cardio') {
+      heart_rate_element.style.fill = 'fb-orange';
+    } else if (hrZone === 'peak') {
+      heart_rate_element.style.fill = 'fb-red';
+    } else {
+      heart_rate_element.style.fill = 'white';
+    }
+    // console.log(hrZone);
+  });
+
+  battery.addEventListener('change', () => {
+    batteryUpdate();
+  });
   // Update the clock every second
-  clock.granularity = 'minutes';
+  clock.granularity = 'seconds';
   clock.ontick = (evt) => {
     const today_time = evt.date;
     // Set time
@@ -191,6 +182,11 @@ function main(){
     // Data Info
     dataInfoUpdate();
   };
+  // One time execution on start
+  hrm.start();
+  animation();
+  dataInfoUpdate();
+  missionProgress();
 }
 
 main();
@@ -221,14 +217,3 @@ main();
 //     missionProgress();
 //   }
 // });
-
-
-
-
-
-// // Execution on start
-// missionProgress();
-// // Update data text
-// dataInfoUpdate();
-// // Run animation once
-// animation();
