@@ -34,6 +34,7 @@ let settings_animation = true;
 let mission_start = '';
 let mission_end = '';
 
+// Functions
 function missionProgress() {
   if (mission_start === '' || mission_end === '') {
     // No proper date. Turn off
@@ -75,7 +76,6 @@ function missionProgress() {
   prgsText.text = `${String(progress)}%`;
   prgs.sweepAngle = progress;
 }
-
 function dataInfoUpdate() {
   if (data_info_current_index === 0) {
     // Steps
@@ -93,132 +93,142 @@ function dataInfoUpdate() {
   data_icon.x = data_text.getBBox().x - 32;
   // console.log(data_text.getBBox().x);
 }
-
 function animation() {
   if (settings_animation) {
     earth.animate('enable');
     moon.animate('enable');
   }
 }
-
-messaging.peerSocket.addEventListener('message', (evt) => {
-  // console.log(evt.data.value);
-  if (evt && evt.data && evt.data.key === 'moon_color') {
-    moon.style.fill = JSON.parse(evt.data.value);
-  }
-  if (evt && evt.data && evt.data.key === 'animation') {
-    settings_animation = JSON.parse(evt.data.value);
-  }
-  if (evt && evt.data && evt.data.key === 'start_time') {
-    if (evt.data.value !== '') {
-      // Set if we see not empty value
-      mission_start = new Date(evt.data.value);
-    } else {
-      mission_start = '';
-    }
-    missionProgress();
-  }
-  if (evt && evt.data && evt.data.key === 'end_time') {
-    if (evt.data.value !== '') {
-      // Set if we see not empty value
-      mission_end = new Date(evt.data.value);
-    } else {
-      mission_end = '';
-    }
-    missionProgress();
-  }
-});
-
-data_text.addEventListener('click', () => {
-  if (data_info_current_index < 2) {
-    data_info_current_index += 1;
+function batteryUpdate(){
+  const currentCharge = battery.chargeLevel;
+  if (battery.charging) {
+    battery_level_element.text = `${Math.floor(currentCharge)}⚡`;
+    battery_level_element.style.fill = 'fb-green';
   } else {
-    data_info_current_index = 0;
-  }
-  dataInfoUpdate();
-  vibration.start('bump');
-});
-
-// Hart rate sensor even handling
-if (HeartRateSensor) {
-  console.log('This device has a HeartRateSensor!');
-  const hrm = new HeartRateSensor();
-  hrm.addEventListener('reading', () => {
-    // Set color based on user profile
-    const hrRate = hrm.heartRate;
-    const hrZone = user.heartRateZone(hrRate);
-    // Set HR value
-    if (hrRate === null) {
-      heart_rate_element.text = '--❤️';
-    } else {
-      heart_rate_element.text = `${hrRate}❤️`;
-    }
-    // Set HR color
-    if (hrZone === 'fat-burn') {
-      heart_rate_element.style.fill = 'fb-yellow';
-    } else if (hrZone === 'cardio') {
-      heart_rate_element.style.fill = 'fb-orange';
-    } else if (hrZone === 'peak') {
-      heart_rate_element.style.fill = 'fb-red';
-    } else {
-      heart_rate_element.style.fill = 'white';
-    }
-    // console.log(hrZone);
-  });
-  // Automatically stop the sensor when the screen is off to conserve battery
-  display.addEventListener('change', () => {
-    if (display.on) {
-      hrm.start();
-    } else {
-      hrm.stop();
-    }
-  });
-  // First start
-  hrm.start();
-} else {
-  console.log('This device does NOT have a HeartRateSensor!');
-}
-
-// Set automation for display on and off
-display.addEventListener('change', () => {
-  if (display.on) {
-    animation();
-    missionProgress();
-  }
-});
-
-// Update the clock every second
-clock.granularity = 'seconds';
-
-clock.ontick = (evt) => {
-  const today_time = evt.date;
-  // Set time
-  let hours = today_time.getHours();
-  hours = util.zeroPad(hours);
-  const mins = util.zeroPad(today_time.getMinutes());
-  app_time.text = `${hours}:${mins}`;
-
-  // Set day and date
-  week_day.text = days[today_time.getDay()];
-  date_day.text = util.zeroPad(today_time.getDate());
-
-  // Battery
-  battery_level_element.text = `${Math.floor(battery.chargeLevel)}%`;
-  if (battery.chargeLevel < 10) {
+    battery_level_element.text = `${Math.floor(currentCharge)}%`;
+  if (currentCharge < 10) {
     battery_level_element.style.fill = 'fb-red';
   } else if (battery.chargeLevel < 20) {
     battery_level_element.style.fill = 'fb-orange';
   } else {
     battery_level_element.style.fill = 'white';
   }
-  // console.log(battery_level_element.text)
-  // Data Info
-  dataInfoUpdate();
-};
+  }
+}
 
-// Execution on start
-missionProgress();
-// Update data text
-dataInfoUpdate();
-// Run animation once
-animation();
+// Main function to run all logic
+function main(){
+  // Start event listeners
+  data_text.addEventListener('click', () => {
+    if (data_info_current_index < 2) {
+      data_info_current_index += 1;
+    } else {
+      data_info_current_index = 0;
+    }
+    dataInfoUpdate();
+    vibration.start('bump');
+  });
+
+  // Hart rate sensor even handling
+  if (HeartRateSensor) {
+    console.log('This device has a HeartRateSensor!');
+    const hrm = new HeartRateSensor();
+    hrm.addEventListener('reading', () => {
+      // Set color based on user profile
+      const hrRate = hrm.heartRate;
+      const hrZone = user.heartRateZone(hrRate);
+      // Set HR value
+      if (hrRate === null) {
+        heart_rate_element.text = '--❤️';
+      } else {
+        heart_rate_element.text = `${hrRate}❤️`;
+      }
+      // Set HR color
+      if (hrZone === 'fat-burn') {
+        heart_rate_element.style.fill = 'fb-yellow';
+      } else if (hrZone === 'cardio') {
+        heart_rate_element.style.fill = 'fb-orange';
+      } else if (hrZone === 'peak') {
+        heart_rate_element.style.fill = 'fb-red';
+      } else {
+        heart_rate_element.style.fill = 'white';
+      }
+      // console.log(hrZone);
+    });
+    // First start
+    hrm.start();
+  } else {
+    console.log('This device does NOT have a HeartRateSensor!');
+  }
+
+  display.addEventListener('change', () => {
+    if (display.on) {
+      animation();
+      missionProgress();
+      hrm.start();
+    } else {
+      // Automatically stop the sensors when the screen is off to conserve battery
+      hrm.stop();
+    }
+  });
+
+  battery.addEventListener('change', () => {
+    console.log("Battery event!")
+    batteryUpdate();
+  });
+
+  // Update the clock every second
+  clock.granularity = 'minutes';
+  clock.ontick = (evt) => {
+    const today_time = evt.date;
+    // Set time
+    const hours = util.zeroPad(today_time.getHours());
+    const mins = util.zeroPad(today_time.getMinutes());
+    app_time.text = `${hours}:${mins}`;
+    // Set day and date
+    week_day.text = days[today_time.getDay()];
+    date_day.text = util.zeroPad(today_time.getDate());
+    // Data Info
+    dataInfoUpdate();
+  };
+}
+
+main();
+// messaging.peerSocket.addEventListener('message', (evt) => {
+//   // console.log(evt.data.value);
+//   if (evt && evt.data && evt.data.key === 'moon_color') {
+//     moon.style.fill = JSON.parse(evt.data.value);
+//   }
+//   if (evt && evt.data && evt.data.key === 'animation') {
+//     settings_animation = JSON.parse(evt.data.value);
+//   }
+//   if (evt && evt.data && evt.data.key === 'start_time') {
+//     if (evt.data.value !== '') {
+//       // Set if we see not empty value
+//       mission_start = new Date(evt.data.value);
+//     } else {
+//       mission_start = '';
+//     }
+//     missionProgress();
+//   }
+//   if (evt && evt.data && evt.data.key === 'end_time') {
+//     if (evt.data.value !== '') {
+//       // Set if we see not empty value
+//       mission_end = new Date(evt.data.value);
+//     } else {
+//       mission_end = '';
+//     }
+//     missionProgress();
+//   }
+// });
+
+
+
+
+
+// // Execution on start
+// missionProgress();
+// // Update data text
+// dataInfoUpdate();
+// // Run animation once
+// animation();
