@@ -43,5 +43,5 @@
     pointer-events="visible"
     text-anchor="middle"
     text-length="16"
-    x="50%" y="95%">0</text>
+    x="50%+15" y="95%">0</text>
 </svg>
