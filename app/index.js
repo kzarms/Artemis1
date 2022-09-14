@@ -6,6 +6,7 @@ import { HeartRateSensor } from 'heart-rate';
 import { today } from 'user-activity';
 import { user } from 'user-profile';
 import { vibration } from 'haptics';
+import * as fs from 'fs';
 import * as messaging from 'messaging';
 import * as util from '../common/utils';
 
@@ -30,37 +31,62 @@ const data_icons_array = ['steps_36px.png', 'floors_36px.png', 'distance_36px.pn
 
 // Set global display value:
 let data_info_current_index = 0;
-// Set initial settings
-let settings_animation = true;
-let settings_mission_start = '';
-let settings_mission_end = '';
+// Set initial config
+let config = {
+  settings_animation: true,
+  settings_mission_start: null,
+  settings_mission_end: null,
+};
+// Set local file to store aconfigs
+const DATA_TYPE = 'json';
+const DATA_FILE = 'mysettings.cbor';
 
 // Functions
+function loadConfig() {
+  try {
+    // Return config form the local file
+    return fs.readFileSync(DATA_FILE, DATA_TYPE);
+  } catch (ex) {
+    // Return default config if there is no file
+    console.log('Return default config');
+    return config;
+  }
+}
+function saveConfig() {
+  // Save config to the file
+  fs.writeFileSync(DATA_FILE, config, DATA_TYPE);
+}
 function missionProgress() {
-  if (settings_mission_start === '' || settings_mission_end === '') {
-    // No proper date. Turn off
+  if (config.settings_mission_start === null || config.settings_mission_end === null) {
+    // Nulls in value
     console.log('One of the value is empty');
     prgsText.text = '';
     prgs.sweepAngle = 0;
     return;
   }
+  console.log(String(config.settings_mission_start));
+  console.log(String(config.settings_mission_end));
+  // Try to calcutlate time
+  const start_time = new Date(config.settings_mission_start);
+  const end_time = new Date(config.settings_mission_end);
   // Calculate mission time in minutes
-  const mission_minutes = Math.floor((settings_mission_end - settings_mission_start) / 60000);
+  const mission_minutes = Math.floor((end_time - start_time) / 60000);
   if (mission_minutes < 0) {
     // Negative value. Remove everything.
+    console.log('Negative value.');
     prgsText.text = '';
     prgs.sweepAngle = 0;
     return;
   }
   // Enable visibility
-  const nowTime = Date.now();
-  if (nowTime < settings_mission_start) {
+  const now_time = Date.now();
+  if (now_time < start_time) {
     console.log('Mission is not started yet');
     prgsText.text = '0%';
     prgs.sweepAngle = 0;
     return;
   }
-  if (nowTime > settings_mission_end) {
+  if (now_time > end_time) {
     console.log('Mission has been completed');
     prgsText.text = '100%';
     prgs.sweepAngle = 100;
@@ -68,11 +94,12 @@ function missionProgress() {
   }
   // Calculate progress and update values
   console.log(`Mission time T: ${String(mission_minutes)} minutes`);
-  const now_minutes = Math.floor((nowTime - settings_mission_start) / 60000);
+  const now_minutes = Math.floor((now_time - start_time) / 60000);
   console.log(`Mission time C: ${String(now_minutes)} minutes`);
   // Set map between minutes and progress
   const progress = Math.floor((now_minutes / mission_minutes) * 100);
   console.log(`Progress: ${String(progress)}`);
+  // Update elements to show progress
   prgsText.text = `${String(progress)}%`;
   prgs.sweepAngle = progress;
 }
@@ -94,7 +121,7 @@ function dataInfoUpdate() {
   // console.log(data_text.getBBox().x);
 }
 function animation() {
-  if (settings_animation) {
+  if (config.settings_animation) {
     earth.animate('enable');
     moon.animate('enable');
   }
@@ -188,25 +215,27 @@ function main() {
       if (evt.data.key === 'moon_color') {
         moon.style.fill = JSON.parse(evt.data.value);
       } else if (evt.data.key === 'animation') {
-        settings_animation = JSON.parse(evt.data.value);
+        config.settings_animation = JSON.parse(evt.data.value);
       } else if (evt.data.key === 'start_time') {
         if (evt.data.value !== '') {
           // Set if we see not empty value
-          settings_mission_start = new Date(evt.data.value);
+          config.settings_mission_start = evt.data.value;
         } else {
-          settings_mission_start = '';
+          config.settings_mission_start = null;
         }
         // Mission update trigger
         missionProgress();
       } else if (evt.data.key === 'end_time') {
         if (evt.data.value !== '') {
           // Set if we see not empty value
-          settings_mission_end = new Date(evt.data.value);
+          config.settings_mission_end = evt.data.value;
         } else {
-          settings_mission_end = '';
+          config.settings_mission_end = null;
         }
         missionProgress();
       }
+      // Save config to file
+      saveConfig();
     }
   });
   // One time execution on start
@@ -214,6 +243,8 @@ function main() {
   animation();
   dataInfoUpdate();
   missionProgress();
+  // Update config
+  config = loadConfig();
 }
 
 main();
