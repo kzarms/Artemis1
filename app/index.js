@@ -6,7 +6,7 @@ import { HeartRateSensor } from 'heart-rate';
 import { today } from 'user-activity';
 import { user } from 'user-profile';
 import { vibration } from 'haptics';
-import * as fs from "fs";
+import * as fs from 'fs';
 import * as messaging from 'messaging';
 import * as util from '../common/utils';
 
@@ -33,13 +33,13 @@ const data_icons_array = ['steps_36px.png', 'floors_36px.png', 'distance_36px.pn
 let data_info_current_index = 0;
 // Set initial config
 let config = {
-  "settings_animation": true,
-  "settings_mission_start": null,
-  "settings_mission_end": null
+  settings_animation: true,
+  settings_mission_start: null,
+  settings_mission_end: null,
 };
 // Set local file to store aconfigs
-const DATA_TYPE = "json";
-const DATA_FILE = "mysettings.cbor";
+const DATA_TYPE = 'json';
+const DATA_FILE = 'mysettings.cbor';
 
 // Functions
 function loadConfig() {
@@ -57,18 +57,18 @@ function saveConfig() {
   fs.writeFileSync(DATA_FILE, config, DATA_TYPE);
 }
 function missionProgress() {
-  if (config["settings_mission_start"] === null || config["settings_mission_end"] === null) {
+  if (config.settings_mission_start === null || config.settings_mission_end === null) {
     // Nulls in value
     console.log('One of the value is empty');
     prgsText.text = '';
     prgs.sweepAngle = 0;
     return;
   }
-  console.log(String(config["settings_mission_start"]));
-  console.log(String(config["settings_mission_end"]));
+  console.log(String(config.settings_mission_start));
+  console.log(String(config.settings_mission_end));
   // Try to calcutlate time
-  let start_time = new Date(config["settings_mission_start"]);
-  let end_time = new Date(config["settings_mission_end"]);
+  const start_time = new Date(config.settings_mission_start);
+  const end_time = new Date(config.settings_mission_end);
   // Calculate mission time in minutes
   const mission_minutes = Math.floor((end_time - start_time) / 60000);
   if (mission_minutes < 0) {
@@ -121,7 +121,7 @@ function dataInfoUpdate() {
   // console.log(data_text.getBBox().x);
 }
 function animation() {
-  if (config["settings_animation"]) {
+  if (config.settings_animation) {
     earth.animate('enable');
     moon.animate('enable');
   }
@@ -215,22 +215,22 @@ function main() {
       if (evt.data.key === 'moon_color') {
         moon.style.fill = JSON.parse(evt.data.value);
       } else if (evt.data.key === 'animation') {
-        config["settings_animation"] = JSON.parse(evt.data.value);
+        config.settings_animation = JSON.parse(evt.data.value);
       } else if (evt.data.key === 'start_time') {
         if (evt.data.value !== '') {
           // Set if we see not empty value
-          config["settings_mission_start"] = evt.data.value;
+          config.settings_mission_start = evt.data.value;
         } else {
-          config["settings_mission_start"] = null;
+          config.settings_mission_start = null;
         }
         // Mission update trigger
         missionProgress();
       } else if (evt.data.key === 'end_time') {
         if (evt.data.value !== '') {
           // Set if we see not empty value
-          config["settings_mission_end"] = evt.data.value;
+          config.settings_mission_end = evt.data.value;
         } else {
-          config["settings_mission_end"] = null;
+          config.settings_mission_end = null;
         }
         missionProgress();
       }
